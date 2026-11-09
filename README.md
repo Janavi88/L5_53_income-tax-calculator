@@ -1,147 +1,172 @@
-# Lab 5: Static Code Analysis — Income Tax Calculator
+# Lab 5: Static Code Analysis – Income Tax Calculator
 
 ## Overview
 
-This project demonstrates static code analysis and security improvements applied to a Python-based income tax calculator. The code was analyzed using **Pylint, Flake8, and Bandit** to identify code quality issues, style violations, and potential security vulnerabilities.
-
-The identified issues were addressed, and the tools were run again to verify the improvements.
+This project demonstrates the use of static code analysis tools to identify and fix code quality issues, coding standard violations, and potential security vulnerabilities in a Python-based income tax calculator.
 
 ## Objectives
 
-- Analyze Python code using static analysis tools.
-- Identify code quality and maintainability issues.
-- Detect potential security vulnerabilities.
-- Correct coding style violations.
-- Compare analysis results before and after fixes.
-- Maintain reports documenting the analysis process.
+- Perform static code analysis on a Python application.
+- Identify coding errors, style violations, and security vulnerabilities.
+- Improve code readability, maintainability, and security.
+- Apply recommended fixes based on analysis reports.
+- Compare the results before and after code improvements.
 
 ## Technologies Used
 
-- **Python** — application implementation
-- **Pylint** — code quality and error detection
-- **Flake8** — style and formatting checks
-- **Bandit** — Python security analysis
-- **Cryptography** — authenticated encryption and RSA key generation
-- **DefusedXML** — safer XML parsing
+| Technology | Purpose |
+|---|---|
+| Python | Application implementation |
+| Pylint | Code quality and maintainability analysis |
+| Flake8 | PEP 8 style and formatting checks |
+| Bandit | Security vulnerability scanning |
+| Cryptography | AES-GCM encryption and RSA key generation |
+| DefusedXML | Secure XML parsing |
 
-## Project Features
+## Application Features
 
-- Simplified new-regime and old-regime tax calculations
-- Tax regime comparison
-- PAN format validation
-- PAN encryption using AES-GCM
-- RSA private key generation using a 2048-bit key
-- Form 16 XML parsing using `defusedxml`
+The income tax calculator demonstrates:
 
-> **Note:** This is an educational demonstration. The tax calculations are simplified and are not intended for official tax filing or financial advice.
+- Simplified new-regime and old-regime tax calculations.
+- Comparison of both regimes to identify the lower calculated tax.
+- PAN format validation using regular expressions.
+- PAN encryption using AES-GCM.
+- RSA private key generation with a 2048-bit key.
+- Form 16 XML parsing using `defusedxml`.
 
-## Static Analysis Tools
+## Issues Identified and Fixes Applied
 
-### 1. Pylint
+The original code contained several issues identified through static analysis and manual review.
 
-Pylint was used to identify issues related to naming conventions, documentation, unused imports and variables, code structure, and maintainability.
-
-**Result after fixes:** 10.00/10.
-
-### 2. Flake8
-
-Flake8 was used to detect PEP 8 style violations, including excessive line lengths, indentation problems, and formatting issues.
-
-**Result after fixes:** No violations reported.
-
-### 3. Bandit
-
-Bandit was used to scan the Python source code for potential security issues.
-
-Security improvements included:
-
-- Replacing insecure AES-ECB encryption with AES-GCM authenticated encryption.
-- Increasing the RSA key size from 1024 to 2048 bits.
-- Replacing standard XML parsing with `defusedxml`.
-- Removing unused imports and unnecessary code.
-
-**Result after fixes:** No security findings reported.
-
-## Before-and-After Results
-
-| Tool | Before | After |
+| Category | Identified Issue | Fix Applied |
 |---|---|---|
-| Pylint | 4.57/10 | 10.00/10 |
-| Flake8 | Multiple style violations | No violations |
-| Bandit | 6 reported findings | 0 findings |
+| Security | AES-ECB encryption | Replaced with AES-GCM authenticated encryption |
+| Security | RSA 1024-bit key | Increased key size to 2048 bits |
+| Security | Unsafe XML parsing using minidom | Replaced with defusedxml |
+| Security | CGIHandler usage | Removed unnecessary CGI functionality |
+| Functional | Incorrect progressive tax calculation | Implemented slab-wise tax calculation |
+| Functional | PAN validation accepted extra characters | Used `re.fullmatch()` |
+| Code Quality | Unused imports and variables | Removed unnecessary declarations |
+| Code Quality | CamelCase naming | Converted functions and variables to snake_case |
+| Code Quality | Missing docstrings | Added module and function documentation |
+| Code Quality | Bare exception handling | Added specific exception handling |
+| Code Quality | Unused function parameters | Removed unnecessary parameters |
 
-The reports are available in the `reports/` directory.
+For a detailed list of identified issues, refer to [`issues.md`](issues.md).
+
+## Before and After Analysis
+
+The following results are based on the reports stored in the repository.
+
+| Static Analysis Tool | Before Fixes | After Fixes |
+|---|---:|---:|
+| Pylint | 4.57/10 | 10.00/10 |
+| Flake8 | 22 violations | 2 violations |
+| Bandit | 6 findings | 0 findings |
+
+### Pylint
+
+Pylint initially reported issues involving naming conventions, missing documentation, unused variables, unnecessary statements, and code structure.
+
+After improvements, the recorded score increased from **4.57/10 to 10.00/10**.
+
+### Flake8
+
+Flake8 initially reported 22 violations, including unused imports, formatting problems, long lines, and bare exception handling.
+
+The AFTER report contains only two remaining line-length violations (`E501`). These should be corrected in a subsequent cleanup.
+
+### Bandit
+
+Bandit initially identified six security findings:
+
+- Use of `minidom` for XML parsing.
+- Use of `CGIHandler`.
+- Insecure AES-ECB encryption.
+- Weak 1024-bit RSA key generation.
+
+After applying the security improvements, Bandit reported **no issues identified**.
+
+## Project Structure
 
 ```text
-.
+L5_53_income-tax-calculator/
+│
+├── BEFORE/
+│   ├── bandit_report.txt
+│   ├── flake8_report.txt
+│   └── pylint_report.txt
+│
+├── AFTER/
+│   ├── corrected_tax_calc.py
+│   ├── bandit_report.txt
+│   ├── flake8_report.txt
+│   └── pylint_report.txt
+│
 ├── tax_calculator.py
-├── reports/
-│   ├── before/
-│   │   ├── pylint_report.txt
-│   │   ├── flake8_report.txt
-│   │   └── bandit_report.txt
-│   └── after/
-│       ├── pylint_report.txt
-│       ├── flake8_report.txt
-│       └── bandit_report.txt
+├── issues.md
 └── README.md
 ```
+
+- `tax_calculator.py`: Original implementation.
+- `BEFORE/`: Static analysis reports generated for the original code.
+- `AFTER/`: Corrected implementation and its static analysis reports.
+- `issues.md`: Detailed documentation of the identified issues and their fixes.
 
 ## Setup and Execution
 
 ### Prerequisites
 
-- Python 3
-- pip
+- Python 3.9 or later.
+- pip package manager.
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/retikka14/L5_53_income-tax-calculator.git
+git clone https://github.com/Janavi88/L5_53_income-tax-calculator.git
 cd L5_53_income-tax-calculator
 ```
 
-### 2. Create and activate a virtual environment
-
-On macOS or Linux:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install dependencies
+### 2. Install dependencies
 
 ```bash
 pip install cryptography defusedxml pylint flake8 bandit
 ```
 
-### 4. Run the program
+### 3. Configure the encryption key
 
-```bash
-python tax_calculator.py
+For Windows PowerShell:
+
+```powershell
+$key = python -c "import secrets; print(secrets.token_hex(32))"
+$env:PAN_KEY = $key
+```
+
+The environment variable stores a randomly generated 256-bit AES key in hexadecimal format.
+
+### 4. Execute the corrected program
+
+```powershell
+python .\AFTER\corrected_tax_calc.py
 ```
 
 ### 5. Run static analysis
 
-```bash
-pylint tax_calculator.py
-flake8 tax_calculator.py
-bandit -r tax_calculator.py
+```powershell
+pylint .\AFTER\corrected_tax_calc.py
+
+flake8 .\AFTER\corrected_tax_calc.py
+
+bandit .\AFTER\corrected_tax_calc.py
 ```
-
-## Reports
-
-The `reports/before/` directory contains the baseline reports generated before the fixes.
-
-The `reports/after/` directory contains the reports generated after the fixes.
-
-These reports provide evidence of the improvements achieved through static analysis.
 
 ## Conclusion
 
-This lab demonstrates how static analysis tools can improve Python code quality, enforce coding standards, and identify potential security weaknesses. Applying the recommended fixes resulted in a Pylint score of 10.00/10, no Flake8 violations, and no Bandit findings in the final scan.
 
-## Disclaimer
+By applying the recommended fixes, the project achieved:
 
-This project is intended for academic and educational purposes only. Its tax calculations are simplified, and its security utilities are demonstrations rather than a complete production-ready tax processing system.
+- An improvement in Pylint score from 4.57/10 to 10.00/10.
+- A reduction in Flake8 violations from 22 to 2.
+- A reduction in Bandit security findings from 6 to 0.
+
+
